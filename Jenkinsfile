@@ -1,7 +1,6 @@
 pipeline{
     
     agent any 
-
     tools { 
         maven 'Maven 3.9.4'
         jdk 'jdk8' 
@@ -9,7 +8,7 @@ pipeline{
     stages {
         stage ('Initialize') {
             steps {
-                sh '''
+                sh 
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
                 
@@ -38,7 +37,5 @@ pipeline{
                 }
             }
         }
-
     }                
-        
 }
