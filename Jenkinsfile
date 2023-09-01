@@ -57,6 +57,7 @@ pipeline{
                    }
                     
                 }
+            }
         stage('Static code analysis'){
             
             steps{
@@ -68,10 +69,11 @@ pipeline{
                         sh 'mvn clean package sonar:sonar'
                     }
 
-                   }
+                 } 
                     
-                } 
-    }   
- }             
+             } 
+         }   
+    
+    }             
 
 }
