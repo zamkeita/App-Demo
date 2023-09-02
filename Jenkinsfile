@@ -82,14 +82,14 @@ pipeline{
                        ], 
                    credentialsId: 'nexus-auth', 
                    groupId: 'com.example', 
-                   nexusUrl: '172.18.0.5:8081', 
+                   nexusUrl: 'http://172.18.0.5:8081', 
                    nexusVersion: 'nexus2', 
                    protocol: 'http', 
                    repository: 'Demoapp-release', 
                    version: '1.0.0'
              }        
-       }
-} 
+         }
+      } 
     
     }             
 
