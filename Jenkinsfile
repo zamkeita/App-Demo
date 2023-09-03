@@ -105,20 +105,24 @@ pipeline{
                    }
                 }
             }
-         stage('Docker image to th dockerhub'){
+         stage('Docker image to nexus'){
 
              steps{
 
                  script{
 
-                     withCredentials([string(credentialsId: 'git_cred', variable: 'docker_hub_cred')]) {
-                           sh 'docker login -u zamkeita -p ${docker_hub_cred}'
-                           sh 'docker image push zamkeita/$JOB_NAME:v1.$BUILD_ID'
-                           sh 'docker image push zamkeita/$JOB_NAME:latest'
+                     withCredentials([usernamePassword(credentialsId: 'nexus-auth', passwordVariable: '', usernameVariable: '')]) {
+                     sh "docker login -u $NEXUS_USERNAME -p $NEXUS_PASSWORD http://172.18.0.5:8081"
+                         }
+
+    
+	             sh 'docker image build -t $JOB_NAME:v1.$BUILD_ID .'
+                     sh 'docker push http://172.18.0.5:8081/repository/demoapp-docker/zamkeita/$JOB_NAME:v1.$BUILD_ID'
+	             sh 'docker push http://172.18.0.5:8081/repository/demoapp-docker/zamkeita/$JOB_NAME:latest'
                      }
                    }
                 }
-            }
+            
 
     
     }             
