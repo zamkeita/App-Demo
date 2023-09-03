@@ -93,7 +93,7 @@ pipeline{
              }        
          }
       } 
-        stage('Docker image build'){
+         stage('Docker image build'){
 
              steps{
 
@@ -102,6 +102,20 @@ pipeline{
                      sh 'docker image build -t $JOB_NAME:v1.$BUILD_ID .'
                      sh 'docker image tag $JOB_NAME:v1.$BUILD_ID zamkeita/$JOB_NAME:v1.$BUILD_ID'
                      sh 'docker image tag $JOB_NAME:v1.$BUILD_ID zamkeita/$JOB_NAME:latest'                
+                   }
+                }
+            }
+         stage('Docker image to th dockerhub'){
+
+             steps{
+
+                 script{
+
+                     withCredentials([string(credentialsId: 'git_cred', variable: 'docker_hub_cred')]) {
+                           sh 'docker login -u zamkeita -p ${docker_hub_cred}'
+                           sh 'docker image push zamkeita/$JOB_NAME:v1.$BUILD_ID'
+                           sh 'docker image push zamkeita/$JOB_NAME:latest'
+                     }
                    }
                 }
             }
