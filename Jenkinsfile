@@ -111,18 +111,14 @@ pipeline{
 
                  script{
 
-                     withCredentials([usernamePassword(credentialsId: 'nexus-auth', passwordVariable: '', usernameVariable: '')]) {
-                     sh "docker login -u $NEXUS_USERNAME -p $NEXUS_PASSWORD http://172.18.0.5:8081"
-                         }
-
-    
-	             sh 'docker image build -t $JOB_NAME:v1.$BUILD_ID .'
+                     withCredentials([string(credentialsId: 'nexus_hub_cred', variable: 'nexus_hub_cred')]) {
+                     sh "docker login -u admin -p ${nexus_hub_cred} 
                      sh 'docker push http://172.18.0.5:8081/repository/demoapp-docker/zamkeita/$JOB_NAME:v1.$BUILD_ID'
 	             sh 'docker push http://172.18.0.5:8081/repository/demoapp-docker/zamkeita/$JOB_NAME:latest'
                      }
                    }
                 }
-            
+            }
 
     
     }             
