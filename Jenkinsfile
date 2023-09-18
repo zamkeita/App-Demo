@@ -121,7 +121,7 @@ pipeline{
                         sh "docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG ."
 
                         // Se connecter au registre Nexus Docker
-                        sh "docker login -u admin -p $DOCKER_CREDS $NEXUS_URL"
+                        echo $DOCKER_CREDS | docker login -u admin --password-stdin $NEXUS_URL
 
                         // Poussez l'image vers Nexus
                         sh "docker push $NEXUS_URL/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG"
