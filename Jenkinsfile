@@ -116,15 +116,11 @@ pipeline{
 
                  script{
 
-                     withCredentials([string(credentialsId: DOCKER_CREDENTIALS, variable: 'DOCKER_CREDS')]) {
-                        // Construire l'image Docker (si nécessaire)
-                        sh "docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG ."
-
-                        // Se connecter au registre Nexus Docker
-                        echo $DOCKER_CREDS | docker login -u admin --password-stdin $NEXUS_URL
-
+                     withCredentials([string(credentialsId: 'git_creds', variable: 'docker_hub_credentiels')]) {
+                        sh "docker login -u zamkeita@gmail.com -p $docker_hub_credentiels"
                         // Poussez l'image vers Nexus
-                        sh "docker push $NEXUS_URL/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG"
+                        sh "docker image push zamkeita/$JOB_NAME:v1.$BUILD_ID
+                        sh "docker image push zamkeita/$JOB_NAME:latest
                      }
                    }
                 }
