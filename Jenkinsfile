@@ -2,7 +2,12 @@
 pipeline{
     
     agent any 
-    
+     environment {
+        NEXUS_URL = 'http://172.18.0.4:8081/repository/demoapp-docker/zamkeita'
+        DOCKER_CREDENTIALS = credentials('nexus_hub_cred')
+        DOCKER_IMAGE_NAME = 'docker-app-demo'
+        DOCKER_IMAGE_TAG = "$JOB_NAME:v1.$BUILD_ID"
+    }
     stages {
         
         stage('Git Checkout'){
@@ -111,10 +116,15 @@ pipeline{
 
                  script{
 
-                     withCredentials([string(credentialsId: 'nexus_hub_cred', variable: 'nexus_hub_cred')]) {
-                     sh 'docker login -u admin -p P@sswd1234' 
-                     sh 'docker push http://172.18.0.5:8081/repository/demoapp-docker/zamkeita/$JOB_NAME:v1.$BUILD_ID'
-	             sh 'docker push http://172.18.0.5:8081/repository/demoapp-docker/zamkeita/$JOB_NAME:latest'
+                     withCredentials([string(credentialsId: DOCKER_CREDENTIALS, variable: 'DOCKER_CREDS')]) {
+                        // Construire l'image Docker (si nécessaire)
+                        sh "docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG ."
+
+                        // Se connecter au registre Nexus Docker
+                        sh "docker login -u admin -p $DOCKER_CREDS $NEXUS_URL"
+
+                        // Poussez l'image vers Nexus
+                        sh "docker push $NEXUS_URL/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG"
                      }
                    }
                 }
