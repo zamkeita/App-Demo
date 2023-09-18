@@ -114,8 +114,8 @@ pipeline{
                      withCredentials([string(credentialsId: 'git_creds', variable: 'docker_hub_credentiels')]) {
                         sh "docker login -u zamkeita@gmail.com -p $docker_hub_credentiels"
                         // Poussez l'image vers Nexus
-                        sh "docker image push zamkeita/$JOB_NAME:v1.$BUILD_ID
-                        sh "docker image push zamkeita/$JOB_NAME:latest
+                        sh docker image push zamkeita/$JOB_NAME:v1.$BUILD_ID
+                        sh docker image push zamkeita/$JOB_NAME:latest
                      }
                    }
                 }
