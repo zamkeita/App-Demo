@@ -2,12 +2,7 @@
 pipeline{
     
     agent any 
-     environment {
-        NEXUS_URL = 'http://172.18.0.4:8081/repository/demoapp-docker/zamkeita'
-        DOCKER_CREDENTIALS = credentials('nexus_hub_cred')
-        DOCKER_IMAGE_NAME = 'docker-app-demo'
-        DOCKER_IMAGE_TAG = "$JOB_NAME:v1.$BUILD_ID"
-    }
+ 
     stages {
         
         stage('Git Checkout'){
